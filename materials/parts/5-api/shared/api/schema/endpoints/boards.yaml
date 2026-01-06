@@ -10,7 +10,6 @@ schemas:
       name:
         type: string
 
-
 getAllBoards:
   summary: Get all boards for current user
   security:
@@ -51,7 +50,6 @@ createBoard:
             $ref: '#/schemas/Board'
     '401':
       $ref: '../shared/responses.yaml#/UnauthorizedError'
-
 
 deleteBoard:
   summary: Delete a board

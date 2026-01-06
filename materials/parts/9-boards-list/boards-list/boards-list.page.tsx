@@ -1,28 +1,28 @@
-import { useState } from "react";
-import { Button } from "@/shared/ui/kit/button";
-import { useBoardsList } from "./model/use-boards-list";
-import { useBoardsFilters } from "./model/use-boards-filters";
-import { useDebouncedValue } from "@/shared/lib/react";
-import { useCreateBoard } from "./model/use-create-board";
+import { useState } from 'react';
+import { Button } from '@/shared/ui/kit/button';
+import { useBoardsList } from './model/use-boards-list';
+import { useBoardsFilters } from './model/use-boards-filters';
+import { useDebouncedValue } from '@/shared/lib/react';
+import { useCreateBoard } from './model/use-create-board';
 
-import { PlusIcon } from "lucide-react";
+import { PlusIcon } from 'lucide-react';
 import {
   BoardsListLayout,
   BoardsListLayoutContent,
   BoardsListLayoutFilters,
   BoardsListLayoutHeader,
-} from "./ui/boards-list-layout";
-import { ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
-import { BoardsSortSelect } from "./ui/boards-sort-select";
-import { BoardsSearchInput } from "./ui/boards-search-input";
-import { BoardItem } from "./compose/board-item";
-import { BoardCard } from "./compose/board-card";
-import { BoardsSidebar } from "./ui/boards-sidebar";
+} from './ui/boards-list-layout';
+import { ViewMode, ViewModeToggle } from './ui/view-mode-toggle';
+import { BoardsSortSelect } from './ui/boards-sort-select';
+import { BoardsSearchInput } from './ui/boards-search-input';
+import { BoardItem } from './compose/board-item';
+import { BoardCard } from './compose/board-card';
+import { BoardsSidebar } from './ui/boards-sidebar';
 import {
   TemplatesGallery,
   TemplatesModal,
   useTemplatesModal,
-} from "@/features/board-templates";
+} from '@/features/board-templates';
 
 function BoardsListPage() {
   const boardsFilters = useBoardsFilters();
@@ -35,7 +35,7 @@ function BoardsListPage() {
 
   const createBoard = useCreateBoard();
 
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   return (
     <>
@@ -45,11 +45,11 @@ function BoardsListPage() {
         sidebar={<BoardsSidebar />}
         header={
           <BoardsListLayoutHeader
-            title="Доски"
-            description="Здесь вы можете просматривать и управлять своими досками"
+            title='Доски'
+            description='Здесь вы можете просматривать и управлять своими досками'
             actions={
               <>
-                <Button variant="outline" onClick={() => templatesModal.open()}>
+                <Button variant='outline' onClick={() => templatesModal.open()}>
                   Выбрать шаблон
                 </Button>
                 <Button
@@ -80,7 +80,7 @@ function BoardsListPage() {
             actions={
               <ViewModeToggle
                 value={viewMode}
-                onChange={(value) => setViewMode(value)}
+                onChange={value => setViewMode(value)}
               />
             }
           />
@@ -94,12 +94,12 @@ function BoardsListPage() {
           hasCursor={boardsQuery.hasNextPage}
           mode={viewMode}
           renderList={() =>
-            boardsQuery.boards.map((board) => (
+            boardsQuery.boards.map(board => (
               <BoardItem key={board.id} board={board} />
             ))
           }
           renderGrid={() =>
-            boardsQuery.boards.map((board) => (
+            boardsQuery.boards.map(board => (
               <BoardCard key={board.id} board={board} />
             ))
           }

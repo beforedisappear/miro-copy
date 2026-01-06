@@ -1,67 +1,67 @@
-import boundaries from "eslint-plugin-boundaries";
+import boundaries from 'eslint-plugin-boundaries';
 
 export const eslintBoundariesConfig = {
   plugins: {
     boundaries,
   },
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
       },
     },
 
-    "boundaries/elements": [
+    'boundaries/elements': [
       {
-        type: "app",
-        pattern: "./src/app",
+        type: 'app',
+        pattern: './src/app',
       },
       {
-        type: "features",
-        pattern: "./src/features/*",
+        type: 'features',
+        pattern: './src/features/*',
       },
       {
-        type: "shared",
-        pattern: "./src/shared",
+        type: 'shared',
+        pattern: './src/shared',
       },
     ],
   },
   rules: {
-    "boundaries/element-types": [
+    'boundaries/element-types': [
       2,
       {
-        default: "allow",
+        default: 'allow',
         rules: [
           {
-            from: "shared",
-            disallow: ["app", "features"],
+            from: 'shared',
+            disallow: ['app', 'features'],
             message:
-              "Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})",
+              'Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})',
           },
           {
-            from: "features",
-            disallow: ["app"],
+            from: 'features',
+            disallow: ['app'],
             message:
-              "Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})",
+              'Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})',
           },
         ],
       },
     ],
-    "boundaries/entry-point": [
+    'boundaries/entry-point': [
       2,
       {
-        default: "disallow",
+        default: 'disallow',
         message:
-          "Модуль (${file.type}) должен импортироваться через public API. Прямой импорт из ${dependency.source} запрещен",
+          'Модуль (${file.type}) должен импортироваться через public API. Прямой импорт из ${dependency.source} запрещен',
 
         rules: [
           {
-            target: ["shared", "app"],
-            allow: "**",
+            target: ['shared', 'app'],
+            allow: '**',
           },
           {
-            target: ["features"],
-            allow: "index.(ts|tsx)",
+            target: ['features'],
+            allow: 'index.(ts|tsx)',
           },
         ],
       },

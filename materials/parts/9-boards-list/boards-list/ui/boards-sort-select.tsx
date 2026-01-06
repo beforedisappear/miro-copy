@@ -4,13 +4,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/kit/select";
+} from '@/shared/ui/kit/select';
 
 export type BoardsSortOption =
-  | "createdAt"
-  | "updatedAt"
-  | "lastOpenedAt"
-  | "name";
+  | 'createdAt'
+  | 'updatedAt'
+  | 'lastOpenedAt'
+  | 'name';
 
 interface BoardsSortSelectProps {
   value: BoardsSortOption;
@@ -23,14 +23,14 @@ export function BoardsSortSelect({
 }: BoardsSortSelectProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger id="sort" className="w-full">
-        <SelectValue placeholder="Сортировка" />
+      <SelectTrigger id='sort' className='w-full'>
+        <SelectValue placeholder='Сортировка' />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="lastOpenedAt">По дате открытия</SelectItem>
-        <SelectItem value="createdAt">По дате создания</SelectItem>
-        <SelectItem value="updatedAt">По дате обновления</SelectItem>
-        <SelectItem value="name">По имени</SelectItem>
+        <SelectItem value='lastOpenedAt'>По дате открытия</SelectItem>
+        <SelectItem value='createdAt'>По дате создания</SelectItem>
+        <SelectItem value='updatedAt'>По дате обновления</SelectItem>
+        <SelectItem value='name'>По имени</SelectItem>
       </SelectContent>
     </Select>
   );

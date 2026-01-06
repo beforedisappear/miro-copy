@@ -1,11 +1,11 @@
-import { ApiSchemas } from "@/shared/api/schema";
+import { ApiSchemas } from '@/shared/api/schema';
 
 type BoardsGroup = {
   title: string;
-  items: ApiSchemas["Board"][];
+  items: ApiSchemas['Board'][];
 };
 
-export function useRecentGroups(boards: ApiSchemas["Board"][]): BoardsGroup[] {
+export function useRecentGroups(boards: ApiSchemas['Board'][]): BoardsGroup[] {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -21,16 +21,16 @@ export function useRecentGroups(boards: ApiSchemas["Board"][]): BoardsGroup[] {
 
     let groupTitle: string;
     if (lastOpenedAt.getTime() === today.getTime()) {
-      groupTitle = "Сегодня";
+      groupTitle = 'Сегодня';
     } else if (lastOpenedAt.getTime() === yesterday.getTime()) {
-      groupTitle = "Вчера";
+      groupTitle = 'Вчера';
     } else if (lastOpenedAt >= lastMonth) {
-      groupTitle = "Прошлый месяц";
+      groupTitle = 'Прошлый месяц';
     } else {
-      groupTitle = "Другое";
+      groupTitle = 'Другое';
     }
 
-    const group = acc.find((g) => g.title === groupTitle);
+    const group = acc.find(g => g.title === groupTitle);
     if (group) {
       group.items.push(board);
     } else {
@@ -41,8 +41,8 @@ export function useRecentGroups(boards: ApiSchemas["Board"][]): BoardsGroup[] {
   }, []);
 
   // Сортируем группы в нужном порядке
-  const groupOrder = ["Сегодня", "Вчера", "Прошлый месяц", "Другое"];
+  const groupOrder = ['Сегодня', 'Вчера', 'Прошлый месяц', 'Другое'];
   return groupOrder
-    .map((title) => groups.find((g) => g.title === title))
+    .map(title => groups.find(g => g.title === title))
     .filter((group): group is BoardsGroup => group !== undefined);
 }

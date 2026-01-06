@@ -1,6 +1,6 @@
-import { Navigate, Outlet, redirect } from "react-router-dom";
-import { ROUTES } from "../routes";
-import { useSession } from "./session";
+import { Navigate, Outlet, redirect } from 'react-router-dom';
+import { ROUTES } from '../routes';
+import { useSession } from './session';
 
 export const protectedLoader = async () => {
   const token = await useSession.getState().getFreshToken();

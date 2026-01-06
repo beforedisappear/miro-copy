@@ -1,5 +1,5 @@
-import { createGStore } from "create-gstore";
-import { useState } from "react";
+import { createGStore } from 'create-gstore';
+import { useState } from 'react';
 
 export const useTemplatesModal = createGStore(() => {
   const [isOpen, setIsOpen] = useState(false);

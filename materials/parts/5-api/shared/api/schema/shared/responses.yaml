@@ -3,14 +3,14 @@ UnauthorizedError:
   content:
     application/json:
       schema:
-        $ref: "#/schemas/Error"
+        $ref: '#/schemas/Error'
 
 NotFoundError:
   description: Resource not found
   content:
     application/json:
       schema:
-        $ref: "#/schemas/Error"
+        $ref: '#/schemas/Error'
 
 schemas:
   Error:

@@ -1,35 +1,35 @@
-import { useState } from "react";
-import { useBoardsList } from "./model/use-boards-list";
+import { useState } from 'react';
+import { useBoardsList } from './model/use-boards-list';
 
 import {
   BoardsListLayout,
   BoardsListLayoutContent,
   BoardsListLayoutHeader,
-} from "./ui/boards-list-layout";
-import { ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+} from './ui/boards-list-layout';
+import { ViewMode, ViewModeToggle } from './ui/view-mode-toggle';
 
-import { BoardItem } from "./compose/board-item";
-import { BoardCard } from "./compose/board-card";
-import { BoardsSidebar } from "./ui/boards-sidebar";
+import { BoardItem } from './compose/board-item';
+import { BoardCard } from './compose/board-card';
+import { BoardsSidebar } from './ui/boards-sidebar';
 
 function BoardsListPage() {
   const boardsQuery = useBoardsList({
     isFavorite: true,
   });
 
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   return (
     <BoardsListLayout
       sidebar={<BoardsSidebar />}
       header={
         <BoardsListLayoutHeader
-          title="Избранные доски"
-          description="Здесь вы можете просматривать и управлять своими избранными досками"
+          title='Избранные доски'
+          description='Здесь вы можете просматривать и управлять своими избранными досками'
           actions={
             <ViewModeToggle
               value={viewMode}
-              onChange={(value) => setViewMode(value)}
+              onChange={value => setViewMode(value)}
             />
           }
         />
@@ -43,10 +43,10 @@ function BoardsListPage() {
         hasCursor={boardsQuery.hasNextPage}
         mode={viewMode}
         renderList={() =>
-          boardsQuery.boards.map((board) => <BoardItem board={board} />)
+          boardsQuery.boards.map(board => <BoardItem board={board} />)
         }
         renderGrid={() =>
-          boardsQuery.boards.map((board) => <BoardCard board={board} />)
+          boardsQuery.boards.map(board => <BoardCard board={board} />)
         }
       />
     </BoardsListLayout>

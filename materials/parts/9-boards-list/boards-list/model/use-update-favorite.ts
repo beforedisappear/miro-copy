@@ -1,6 +1,6 @@
-import { rqClient } from "@/shared/api/instance";
-import { useQueryClient } from "@tanstack/react-query";
-import { startTransition, useOptimistic } from "react";
+import { rqClient } from '@/shared/api/instance';
+import { useQueryClient } from '@tanstack/react-query';
+import { startTransition, useOptimistic } from 'react';
 
 export function useUpdateFavorite() {
   const queryClient = useQueryClient();
@@ -8,12 +8,12 @@ export function useUpdateFavorite() {
   const [favorite, setFavorite] = useOptimistic<Record<string, boolean>>({});
 
   const updateFavoriteMutation = rqClient.useMutation(
-    "put",
-    "/boards/{boardId}/favorite",
+    'put',
+    '/boards/{boardId}/favorite',
     {
       onSettled: async () => {
         await queryClient.invalidateQueries(
-          rqClient.queryOptions("get", "/boards"),
+          rqClient.queryOptions('get', '/boards'),
         );
       },
     },
@@ -21,7 +21,7 @@ export function useUpdateFavorite() {
 
   const toggle = (board: { id: string; isFavorite: boolean }) => {
     startTransition(async () => {
-      setFavorite((prev) => ({
+      setFavorite(prev => ({
         ...prev,
         [board.id]: !board.isFavorite,
       }));

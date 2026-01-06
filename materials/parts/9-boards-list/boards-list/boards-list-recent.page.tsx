@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useBoardsList } from "./model/use-boards-list";
+import { useState } from 'react';
+import { useBoardsList } from './model/use-boards-list';
 
 import {
   BoardsLayoutContentGroups,
@@ -8,21 +8,21 @@ import {
   BoardsListLayoutContent,
   BoardsListLayoutHeader,
   BoardsListLayoutList,
-} from "./ui/boards-list-layout";
-import { ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+} from './ui/boards-list-layout';
+import { ViewMode, ViewModeToggle } from './ui/view-mode-toggle';
 
-import { useRecentGroups } from "./model/use-recent-groups";
+import { useRecentGroups } from './model/use-recent-groups';
 
-import { BoardCard } from "./compose/board-card";
-import { BoardItem } from "./compose/board-item";
-import { BoardsSidebar } from "./ui/boards-sidebar";
+import { BoardCard } from './compose/board-card';
+import { BoardItem } from './compose/board-item';
+import { BoardsSidebar } from './ui/boards-sidebar';
 
 function BoardsListPage() {
   const boardsQuery = useBoardsList({
-    sort: "lastOpenedAt",
+    sort: 'lastOpenedAt',
   });
 
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   const recentGroups = useRecentGroups(boardsQuery.boards);
 
@@ -31,12 +31,12 @@ function BoardsListPage() {
       sidebar={<BoardsSidebar />}
       header={
         <BoardsListLayoutHeader
-          title="Последние доски"
-          description="Здесь вы можете просматривать и управлять своими последними досками"
+          title='Последние доски'
+          description='Здесь вы можете просматривать и управлять своими последними досками'
           actions={
             <ViewModeToggle
               value={viewMode}
-              onChange={(value) => setViewMode(value)}
+              onChange={value => setViewMode(value)}
             />
           }
         />
@@ -51,18 +51,18 @@ function BoardsListPage() {
         mode={viewMode}
       >
         <BoardsLayoutContentGroups
-          groups={recentGroups.map((group) => ({
+          groups={recentGroups.map(group => ({
             items: {
               list: (
                 <BoardsListLayoutList>
-                  {group.items.map((board) => (
+                  {group.items.map(board => (
                     <BoardItem board={board} />
                   ))}
                 </BoardsListLayoutList>
               ),
               cards: (
                 <BoardsListLayoutCards>
-                  {group.items.map((board) => (
+                  {group.items.map(board => (
                     <BoardCard board={board} />
                   ))}
                 </BoardsListLayoutCards>

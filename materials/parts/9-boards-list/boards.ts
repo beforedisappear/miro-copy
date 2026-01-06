@@ -1,7 +1,7 @@
-import { HttpResponse } from "msw";
-import { http } from "../http";
-import { ApiSchemas } from "../../schema";
-import { verifyTokenOrThrow } from "../session";
+import { HttpResponse } from 'msw';
+import { http } from '../http';
+import { ApiSchemas } from '../../schema';
+import { verifyTokenOrThrow } from '../session';
 
 // Функция для генерации случайной даты в пределах последних 30 дней
 function randomDate() {
@@ -18,54 +18,54 @@ function randomDate() {
 // Функция для генерации случайного названия доски
 function generateBoardName() {
   const adjectives = [
-    "Стратегический",
-    "Креативный",
-    "Инновационный",
-    "Годовой",
-    "Квартальный",
-    "Важный",
-    "Срочный",
-    "Ключевой",
-    "Долгосрочный",
-    "Оперативный",
-    "Тактический",
-    "Аналитический",
-    "Исследовательский",
+    'Стратегический',
+    'Креативный',
+    'Инновационный',
+    'Годовой',
+    'Квартальный',
+    'Важный',
+    'Срочный',
+    'Ключевой',
+    'Долгосрочный',
+    'Оперативный',
+    'Тактический',
+    'Аналитический',
+    'Исследовательский',
   ];
 
   const nouns = [
-    "План",
-    "Проект",
-    "Дизайн",
-    "Отчет",
-    "Анализ",
-    "Концепт",
-    "Процесс",
-    "Прототип",
-    "Обзор",
-    "Презентация",
-    "Маркетинг",
-    "Разработка",
-    "Бюджет",
-    "Исследование",
-    "Запуск",
-    "Совещание",
+    'План',
+    'Проект',
+    'Дизайн',
+    'Отчет',
+    'Анализ',
+    'Концепт',
+    'Процесс',
+    'Прототип',
+    'Обзор',
+    'Презентация',
+    'Маркетинг',
+    'Разработка',
+    'Бюджет',
+    'Исследование',
+    'Запуск',
+    'Совещание',
   ];
 
   const themes = [
-    "Продукта",
-    "Команды",
-    "Компании",
-    "Кампании",
-    "Стратегии",
-    "Рынка",
-    "Бренда",
-    "Бизнеса",
-    "Проекта",
-    "Квартала",
-    "Года",
-    "Пользователя",
-    "Клиента",
+    'Продукта',
+    'Команды',
+    'Компании',
+    'Кампании',
+    'Стратегии',
+    'Рынка',
+    'Бренда',
+    'Бизнеса',
+    'Проекта',
+    'Квартала',
+    'Года',
+    'Пользователя',
+    'Клиента',
   ];
 
   const randomAdjective =
@@ -77,8 +77,8 @@ function generateBoardName() {
 }
 
 // Генерация 1000 случайных досок
-function generateRandomBoards(count: number): ApiSchemas["Board"][] {
-  const result: ApiSchemas["Board"][] = [];
+function generateRandomBoards(count: number): ApiSchemas['Board'][] {
+  const result: ApiSchemas['Board'][] = [];
 
   for (let i = 0; i < count; i++) {
     const createdAt = randomDate();
@@ -103,48 +103,48 @@ function generateRandomBoards(count: number): ApiSchemas["Board"][] {
 }
 
 // Создаем 1000 случайных досок
-const boards: ApiSchemas["Board"][] = generateRandomBoards(1000);
+const boards: ApiSchemas['Board'][] = generateRandomBoards(1000);
 
 export const boardsHandlers = [
-  http.get("/boards", async (ctx) => {
+  http.get('/boards', async ctx => {
     await verifyTokenOrThrow(ctx.request);
 
     const url = new URL(ctx.request.url);
-    const page = Number(url.searchParams.get("page") || 1);
-    const limit = Number(url.searchParams.get("limit") || 10);
-    const search = url.searchParams.get("search");
-    const isFavorite = url.searchParams.get("isFavorite");
-    const sort = url.searchParams.get("sort");
+    const page = Number(url.searchParams.get('page') || 1);
+    const limit = Number(url.searchParams.get('limit') || 10);
+    const search = url.searchParams.get('search');
+    const isFavorite = url.searchParams.get('isFavorite');
+    const sort = url.searchParams.get('sort');
 
     let filteredBoards = [...boards];
 
     // Фильтрация по поиску
     if (search) {
-      filteredBoards = filteredBoards.filter((board) =>
+      filteredBoards = filteredBoards.filter(board =>
         board.name.toLowerCase().includes(search.toLowerCase()),
       );
     }
 
     // Фильтрация по избранному
     if (isFavorite !== null) {
-      const isFav = isFavorite === "true";
+      const isFav = isFavorite === 'true';
       filteredBoards = filteredBoards.filter(
-        (board) => board.isFavorite === isFav,
+        board => board.isFavorite === isFav,
       );
     }
 
     // Сортировка
     if (sort) {
       filteredBoards.sort((a, b) => {
-        if (sort === "name") {
+        if (sort === 'name') {
           return a.name.localeCompare(b.name);
         } else {
           // Для дат (createdAt, updatedAt, lastOpenedAt)
           return (
             new Date(
-              b[sort as keyof ApiSchemas["Board"]].toString(),
+              b[sort as keyof ApiSchemas['Board']].toString(),
             ).getTime() -
-            new Date(a[sort as keyof ApiSchemas["Board"]].toString()).getTime()
+            new Date(a[sort as keyof ApiSchemas['Board']].toString()).getTime()
           );
         }
       });
@@ -163,14 +163,14 @@ export const boardsHandlers = [
     });
   }),
 
-  http.get("/boards/{boardId}", async ({ params, request }) => {
+  http.get('/boards/{boardId}', async ({ params, request }) => {
     await verifyTokenOrThrow(request);
     const { boardId } = params;
-    const board = boards.find((board) => board.id === boardId);
+    const board = boards.find(board => board.id === boardId);
 
     if (!board) {
       return HttpResponse.json(
-        { message: "Board not found", code: "NOT_FOUND" },
+        { message: 'Board not found', code: 'NOT_FOUND' },
         { status: 404 },
       );
     }
@@ -180,13 +180,13 @@ export const boardsHandlers = [
     return HttpResponse.json(board);
   }),
 
-  http.post("/boards", async (ctx) => {
+  http.post('/boards', async ctx => {
     await verifyTokenOrThrow(ctx.request);
 
     const now = new Date().toISOString();
-    const board: ApiSchemas["Board"] = {
+    const board: ApiSchemas['Board'] = {
       id: crypto.randomUUID(),
-      name: "New Board",
+      name: 'New Board',
       createdAt: now,
       updatedAt: now,
       lastOpenedAt: now,
@@ -197,52 +197,52 @@ export const boardsHandlers = [
     return HttpResponse.json(board, { status: 201 });
   }),
 
-  http.put("/boards/{boardId}/favorite", async ({ params, request }) => {
+  http.put('/boards/{boardId}/favorite', async ({ params, request }) => {
     await verifyTokenOrThrow(request);
     const { boardId } = params;
-    const board = boards.find((board) => board.id === boardId);
+    const board = boards.find(board => board.id === boardId);
 
     if (!board) {
       return HttpResponse.json(
-        { message: "Board not found", code: "NOT_FOUND" },
+        { message: 'Board not found', code: 'NOT_FOUND' },
         { status: 404 },
       );
     }
 
-    const data = (await request.json()) as ApiSchemas["UpdateBoardFavorite"];
+    const data = (await request.json()) as ApiSchemas['UpdateBoardFavorite'];
     board.isFavorite = data.isFavorite;
     board.updatedAt = new Date().toISOString();
 
     return HttpResponse.json(board, { status: 201 });
   }),
 
-  http.put("/boards/{boardId}/rename", async ({ params, request }) => {
+  http.put('/boards/{boardId}/rename', async ({ params, request }) => {
     await verifyTokenOrThrow(request);
     const { boardId } = params;
-    const board = boards.find((board) => board.id === boardId);
+    const board = boards.find(board => board.id === boardId);
 
     if (!board) {
       return HttpResponse.json(
-        { message: "Board not found", code: "NOT_FOUND" },
+        { message: 'Board not found', code: 'NOT_FOUND' },
         { status: 404 },
       );
     }
 
-    const data = (await request.json()) as ApiSchemas["RenameBoard"];
+    const data = (await request.json()) as ApiSchemas['RenameBoard'];
     board.name = data.name;
     board.updatedAt = new Date().toISOString();
 
     return HttpResponse.json(board, { status: 201 });
   }),
 
-  http.delete("/boards/{boardId}", async ({ params, request }) => {
+  http.delete('/boards/{boardId}', async ({ params, request }) => {
     await verifyTokenOrThrow(request);
     const { boardId } = params;
-    const index = boards.findIndex((board) => board.id === boardId);
+    const index = boards.findIndex(board => board.id === boardId);
 
     if (index === -1) {
       return HttpResponse.json(
-        { message: "Board not found", code: "NOT_FOUND" },
+        { message: 'Board not found', code: 'NOT_FOUND' },
         { status: 404 },
       );
     }

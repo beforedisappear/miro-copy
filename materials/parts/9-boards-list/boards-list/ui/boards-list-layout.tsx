@@ -1,6 +1,6 @@
-import { Skeleton } from "@/shared/ui/kit/skeleton";
-import React from "react";
-import { ViewMode } from "./view-mode-toggle";
+import { Skeleton } from '@/shared/ui/kit/skeleton';
+import React from 'react';
+import { ViewMode } from './view-mode-toggle';
 
 export function BoardsListLayout({
   header,
@@ -16,12 +16,12 @@ export function BoardsListLayout({
   templates?: React.ReactNode;
 }) {
   return (
-    <div className="container mx-auto">
-      <div className="flex gap-4">
+    <div className='container mx-auto'>
+      <div className='flex gap-4'>
         {sidebar}
-        <div className="flex-1  p-4 flex flex-col gap-6">
+        <div className='flex-1  p-4 flex flex-col gap-6'>
           {templates && (
-            <div className="rounded-md bg-gray-100 p-4">{templates}</div>
+            <div className='rounded-md bg-gray-100 p-4'>{templates}</div>
           )}
           {header}
           {filters}
@@ -42,13 +42,13 @@ export function BoardsListLayoutHeader({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="flex justify-between items-center">
+    <div className='flex justify-between items-center'>
       <div>
-        <h1 className="text-2xl font-bold">{title}</h1>
-        {description && <p className="text-gray-500">{description}</p>}
+        <h1 className='text-2xl font-bold'>{title}</h1>
+        {description && <p className='text-gray-500'>{description}</p>}
       </div>
 
-      <div className="flex gap-2">{actions}</div>
+      <div className='flex gap-2'>{actions}</div>
     </div>
   );
 }
@@ -63,22 +63,22 @@ export function BoardsListLayoutFilters({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className='flex items-center gap-4'>
       {filters && (
-        <div className="flex items-center gap-2">
-          <div className="text-sm text-gray-500 whitespace-nowrap">
+        <div className='flex items-center gap-2'>
+          <div className='text-sm text-gray-500 whitespace-nowrap'>
             Filter by
           </div>
           {filters}
         </div>
       )}
       {sort && (
-        <div className="flex items-center gap-2 ">
-          <div className="text-sm text-gray-500 whitespace-nowrap">Sort by</div>
+        <div className='flex items-center gap-2 '>
+          <div className='text-sm text-gray-500 whitespace-nowrap'>Sort by</div>
           {sort}
         </div>
       )}
-      {actions && <div className="ml-auto">{actions}</div>}
+      {actions && <div className='ml-auto'>{actions}</div>}
     </div>
   );
 }
@@ -106,34 +106,34 @@ export function BoardsListLayoutContent({
 }) {
   return (
     <div>
-      {isPending && <div className="text-center py-10">Загрузка...</div>}
-      {mode === "list" && renderList && (
+      {isPending && <div className='text-center py-10'>Загрузка...</div>}
+      {mode === 'list' && renderList && (
         <BoardsListLayoutList>{renderList?.()}</BoardsListLayoutList>
       )}
-      {mode === "cards" && renderGrid && (
+      {mode === 'cards' && renderGrid && (
         <BoardsListLayoutCards>{renderGrid?.()}</BoardsListLayoutCards>
       )}
       {!isPending && children}
 
       {isEmpty && !isPending && (
-        <div className="text-center py-10">Доски не найдены</div>
+        <div className='text-center py-10'>Доски не найдены</div>
       )}
 
       {hasCursor && (
-        <div ref={cursorRef} className="text-center py-8">
+        <div ref={cursorRef} className='text-center py-8'>
           {isPendingNext &&
             {
               list: (
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
+                <div className='flex flex-col gap-2'>
+                  <Skeleton className='h-10 w-full' />
+                  <Skeleton className='h-10 w-full' />
                 </div>
               ),
               cards: (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <Skeleton className="h-40 w-full" />
-                  <Skeleton className="h-40 w-full" />
-                  <Skeleton className="h-40 w-full" />
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                  <Skeleton className='h-40 w-full' />
+                  <Skeleton className='h-40 w-full' />
+                  <Skeleton className='h-40 w-full' />
                 </div>
               ),
             }[mode]}
@@ -149,7 +149,7 @@ export function BoardsListLayoutCards({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
       {children}
     </div>
   );
@@ -160,7 +160,7 @@ export function BoardsListLayoutList({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="flex flex-col gap-2">{children}</div>;
+  return <div className='flex flex-col gap-2'>{children}</div>;
 }
 
 export function BoardsLayoutContentGroups({
@@ -172,10 +172,10 @@ export function BoardsLayoutContentGroups({
   }[];
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      {groups.map((group) => (
+    <div className='flex flex-col gap-2'>
+      {groups.map(group => (
         <div key={group.title}>
-          <div className="text-lg font-bold mb-2">{group.title}</div>
+          <div className='text-lg font-bold mb-2'>{group.title}</div>
           {group.items}
         </div>
       ))}

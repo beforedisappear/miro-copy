@@ -6,13 +6,11 @@ info:
 paths:
   /boards:
     get:
-      $ref: "./endpoints/boards.yaml#/getAllBoards"
+      $ref: './endpoints/boards.yaml#/getAllBoards'
 
     post:
-      $ref: "./endpoints/boards.yaml#/createBoard"
+      $ref: './endpoints/boards.yaml#/createBoard'
 
   /boards/{boardId}:
     delete:
-      $ref: "./endpoints/boards.yaml#/deleteBoard"
-
-      
+      $ref: './endpoints/boards.yaml#/deleteBoard'
