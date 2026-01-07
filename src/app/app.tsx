@@ -1,10 +1,8 @@
 import { Outlet } from 'react-router-dom';
-import { AppHeader } from '@/features/header';
 
 export function App() {
   return (
-    <div>
-      <AppHeader />
+    <div className='flex flex-col min-h-screen'>
       <Outlet />
     </div>
   );
