@@ -1,9 +1,11 @@
 import { rqClient } from '@/shared/api/instance';
 
 function BoardsListPage() {
-  const data = rqClient.useQuery('get', '/boards');
+  const data = rqClient.useQuery('get', '/boards', {
+    params: { query: { limit: 100 } },
+  });
 
-  if (data.isLoading) { 
+  if (data.isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -15,7 +17,7 @@ function BoardsListPage() {
     <div>
       <h1>Board page</h1>
       <ul>
-        {data.data?.map(board => (
+        {data.data?.list.map(board => (
           <li key={board.id}>{board.name}</li>
         ))}
       </ul>

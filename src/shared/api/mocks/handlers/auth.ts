@@ -38,10 +38,7 @@ export const authHandlers = [
     });
 
     return HttpResponse.json(
-      {
-        accessToken,
-        user,
-      },
+      { accessToken, user },
       {
         status: 200,
         headers: { 'Set-Cookie': createRefreshTokenCookie(refreshToken) },
@@ -54,10 +51,7 @@ export const authHandlers = [
 
     if (mockUsers.some(u => u.email === body.email)) {
       return HttpResponse.json(
-        {
-          message: 'Пользователь уже существует',
-          code: 'USER_EXISTS',
-        },
+        { message: 'Пользователь уже существует', code: 'USER_EXISTS' },
         { status: 400 },
       );
     }
