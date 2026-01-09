@@ -11,11 +11,16 @@ export function useWindowEvents(viewModel: ViewModel) {
       viewModel.window?.onMouseUp?.(e);
     };
 
+    const onMouseWheel = (e: globalThis.WheelEvent) => {
+      viewModel.window?.onMouseWheel?.(e);
+    };
+
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     window.addEventListener('mousemove', onMouseMove, { signal });
     window.addEventListener('mouseup', onMouseUp, { signal });
+    window.addEventListener('wheel', onMouseWheel, { signal });
 
     return () => {
       abortController.abort();

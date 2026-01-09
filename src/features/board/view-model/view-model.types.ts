@@ -30,6 +30,7 @@ export type ViewModel = {
   window?: {
     onMouseUp?: (e: globalThis.MouseEvent) => void;
     onMouseMove?: (e: globalThis.MouseEvent) => void;
+    onMouseWheel?: (e: globalThis.WheelEvent) => void;
   };
   actions?: {
     addSticker: {

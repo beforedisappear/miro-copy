@@ -24,6 +24,7 @@ import {
 } from './variants/window-dragging';
 import type { ViewModel } from './view-model.types';
 import type { ViewModelParams } from './view-model-params.types';
+import { zoomHandler } from './decorator/zoom';
 
 export type ViewState =
   | IdleViewState
@@ -46,6 +47,8 @@ export function useViewModel(params: Omit<ViewModelParams, 'setViewState'>) {
   const selectionWindowViewModel = useSelectionWindowViewModel(newParams);
   const nodesDraggingViewModel = useNodesDraggingViewModel(newParams);
   const windowDraggingViewModel = useWindowDraggingViewModel(newParams);
+
+  const zoomDecorator = zoomHandler(newParams);
 
   switch (viewState.type) {
     case 'idle': {
@@ -77,5 +80,5 @@ export function useViewModel(params: Omit<ViewModelParams, 'setViewState'>) {
       throw new Error('Invalid view model state');
   }
 
-  return viewModel;
+  return zoomDecorator(viewModel);
 }

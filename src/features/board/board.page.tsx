@@ -33,7 +33,11 @@ function BoardPage() {
 
   return (
     <Layout ref={layoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
-      <Dots />
+      <Dots
+        windowPosition={
+          viewModel.windowPosition ?? windowPositionModel.position
+        }
+      />
 
       <Canvas
         ref={canvasRef}
