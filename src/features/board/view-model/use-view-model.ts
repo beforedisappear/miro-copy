@@ -1,21 +1,76 @@
-import { useAddStickerViewModel } from './variants/add-sticker';
-import { useIdleViewModel } from './variants/idle';
+import { useState } from 'react';
+import {
+  useAddStickerViewModel,
+  type AddStickerViewState,
+} from './variants/add-sticker';
+import { useIdleViewModel, type IdleViewState } from './variants/idle';
+import {
+  useSelectionWindowViewModel,
+  type SelectionWindowViewState,
+} from './variants/selection-window';
+
+import { goToIdle } from './variants/idle';
+import {
+  useEditStickerViewModel,
+  type EditStickerViewState,
+} from './variants/edit-sticker';
+import {
+  useNodesDraggingViewModel,
+  type NodesDraggingViewState,
+} from './variants/nodes-dragging';
+import {
+  useWindowDraggingViewModel,
+  type WindowDraggingViewState,
+} from './variants/window-dragging';
 import type { ViewModel } from './view-model.types';
 import type { ViewModelParams } from './view-model-params.types';
 
-export function useViewModel(params: ViewModelParams) {
+export type ViewState =
+  | IdleViewState
+  | AddStickerViewState
+  | SelectionWindowViewState
+  | EditStickerViewState
+  | NodesDraggingViewState
+  | WindowDraggingViewState;
+
+export function useViewModel(params: Omit<ViewModelParams, 'setViewState'>) {
+  const [viewState, setViewState] = useState<ViewState>(() => goToIdle());
+
   let viewModel: ViewModel;
 
-  const addStickerViewModel = useAddStickerViewModel(params);
-  const idleViewModel = useIdleViewModel(params);
+  const newParams = { ...params, setViewState };
 
-  switch (params.viewStateModel.viewState.type) {
+  const addStickerViewModel = useAddStickerViewModel(newParams);
+  const editStickerViewModel = useEditStickerViewModel(newParams);
+  const idleViewModel = useIdleViewModel(newParams);
+  const selectionWindowViewModel = useSelectionWindowViewModel(newParams);
+  const nodesDraggingViewModel = useNodesDraggingViewModel(newParams);
+  const windowDraggingViewModel = useWindowDraggingViewModel(newParams);
+
+  switch (viewState.type) {
     case 'idle': {
-      viewModel = idleViewModel(params.viewStateModel.viewState);
+      viewModel = idleViewModel(viewState);
       break;
     }
     case 'add-sticker': {
       viewModel = addStickerViewModel();
+      break;
+    }
+    case 'selection-window': {
+      viewModel = selectionWindowViewModel(viewState);
+      break;
+    }
+    case 'edit-sticker': {
+      viewModel = editStickerViewModel(viewState);
+      break;
+    }
+    case 'nodes-dragging': {
+      viewModel = nodesDraggingViewModel(viewState);
+      break;
+    }
+    case 'window-dragging': {
+      console.log('window-dragging', viewState);
+      viewModel = windowDraggingViewModel(viewState);
       break;
     }
     default:

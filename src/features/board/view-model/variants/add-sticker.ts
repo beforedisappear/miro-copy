@@ -1,9 +1,15 @@
 import type { ViewModelParams } from '../view-model-params.types';
 import type { ViewModel } from '../view-model.types';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { goToIdle } from './idle';
+import { pointOnScreenToCanvas } from '../../domain/screen';
+
+export type AddStickerViewState = {
+  type: 'add-sticker';
+};
 
 export function useAddStickerViewModel(params: ViewModelParams) {
-  const { nodesModel, viewStateModel, canvasRect } = params;
+  const { nodesModel, setViewState, canvasRect, windowPositionModel } = params;
 
   return (): ViewModel => ({
     nodes: nodesModel.nodes,
@@ -11,27 +17,33 @@ export function useAddStickerViewModel(params: ViewModelParams) {
       onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => {
         if (e.key !== 'Enter') return;
 
-        viewStateModel.goToIdle();
+        setViewState(goToIdle());
       },
     },
     canvas: {
       onClick: (e: MouseEvent<HTMLDivElement>) => {
         if (!canvasRect) return;
 
-        nodesModel.addSticker({
-          text: 'Default',
-          x: e.clientX - canvasRect.x,
-          y: e.clientY - canvasRect.y,
-        });
+        const point = pointOnScreenToCanvas(
+          { x: e.clientX, y: e.clientY },
+          windowPositionModel.position,
+          canvasRect,
+        );
 
-        viewStateModel.goToIdle();
+        nodesModel.addSticker({ text: 'Default', ...point });
+
+        setViewState(goToIdle());
       },
     },
     actions: {
       addSticker: {
-        onClick: () => viewStateModel.goToIdle(),
         isActive: true,
+        onClick: () => setViewState(goToIdle()),
       },
     },
   });
+}
+
+export function goToAddSticker(): AddStickerViewState {
+  return { type: 'add-sticker' };
 }

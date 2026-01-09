@@ -31,5 +31,45 @@ export function useNodes() {
     ]);
   };
 
-  return { nodes, addSticker };
+  const deleteSticker = (args: { ids: string[] }) => {
+    const { ids } = args;
+
+    setNodes(prev => prev.filter(node => !ids.includes(node.id)));
+  };
+
+  const updateStickerText = (args: { id: string; text: string }) => {
+    const { id, text } = args;
+
+    setNodes(prev =>
+      prev.map(node => (node.id === id ? { ...node, text } : node)),
+    );
+  };
+
+  const updateNodesPositions = (args: {
+    positions: { id: string; x: number; y: number }[];
+  }) => {
+    const { positions } = args;
+
+    const record = Object.fromEntries(positions.map(p => [p.id, p]));
+
+    setNodes(prev =>
+      prev.map(node => {
+        const newPosition = record[node.id];
+
+        if (newPosition) {
+          return { ...node, x: newPosition.x, y: newPosition.y };
+        }
+
+        return node;
+      }),
+    );
+  };
+
+  return {
+    nodes,
+    addSticker,
+    deleteSticker,
+    updateStickerText,
+    updateNodesPositions,
+  };
 }
