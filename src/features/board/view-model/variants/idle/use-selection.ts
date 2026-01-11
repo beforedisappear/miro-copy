@@ -18,7 +18,7 @@ export function useSelection(params: ViewModelParams) {
   };
 
   const handleNodeClick = (
-    e: MouseEvent<HTMLButtonElement>,
+    e: MouseEvent,
     idleState: IdleViewState,
     nodeId: string,
   ) => {

@@ -1,7 +1,7 @@
 import type { ViewModelParams } from '../view-model-params.types';
 import type { ViewModel } from '../view-model.types';
 import { goToIdle } from './idle';
-import type { Point } from '../../domain/point';
+import { resolveRelativePoint, type Point } from '../../domain/point';
 import {
   createRectFromDimensions,
   createRectFromPoints,
@@ -10,6 +10,7 @@ import {
 } from '../../domain/rect';
 import { pointOnScreenToCanvas } from '../../domain/screen';
 import { selectItems, type Selection } from '../../domain/selection';
+import { createRelativeBase } from '../decorator/resolve-relative';
 
 export type SelectionWindowViewState = {
   type: 'selection-window';
@@ -28,13 +29,18 @@ export function useSelectionWindowViewModel(params: ViewModelParams) {
   } = params;
 
   const getNodes = (state: SelectionWindowViewState, selectionRect: Rect) => {
+    const relativeBase = createRelativeBase(nodesModel.nodes);
+
     return nodesModel.nodes.map(node => {
       const nodeDimensions = nodesRects[node.id];
 
       const nodeRect =
         node.type === 'sticker'
           ? createRectFromDimensions(node, nodeDimensions)
-          : createRectFromPoints(node.start, node.end);
+          : createRectFromPoints(
+              resolveRelativePoint(relativeBase, node.start),
+              resolveRelativePoint(relativeBase, node.end),
+            );
 
       return {
         ...node,

@@ -7,7 +7,7 @@ export function useGoToEditSticker(params: ViewModelParams) {
   const { setViewState } = params;
 
   const handleNodeClick = (
-    e: MouseEvent<HTMLButtonElement>,
+    e: MouseEvent,
     idleState: IdleViewState,
     nodeId: string,
   ) => {

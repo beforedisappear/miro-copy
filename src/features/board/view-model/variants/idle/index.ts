@@ -4,7 +4,6 @@ import type { ViewModel } from '../../view-model.types';
 import { useSelection } from './use-selection';
 import { useDeleteSelected } from './use-delete-selected';
 import { useGoToEditSticker } from './use-go-to-edit-sticker';
-import { useGotoAddSticker } from './use-go-to-add-sticker';
 import { useMouseDown } from './use-mouse-down';
 import { useGoToSelectionWindow } from './use-go-to-selection-window';
 import { useGoToNodesDragging } from './use-go-to-nodes-dragging';
@@ -34,7 +33,6 @@ export function useIdleViewModel(params: ViewModelParams) {
 
   const selection = useSelection(params);
   const deleteSelected = useDeleteSelected(params);
-  const goToAddSticker = useGotoAddSticker(params);
   const goToEditSticker = useGoToEditSticker(params);
   const goToSelectionWindow = useGoToSelectionWindow(params);
   const goToNodesDragging = useGoToNodesDragging(params);
@@ -45,10 +43,10 @@ export function useIdleViewModel(params: ViewModelParams) {
     return nodesModel.nodes.map(node => ({
       ...node,
       isSelected: selection.isSelected(idleState, node.id),
-      onMouseDown: (e: MouseEvent<HTMLButtonElement>) => {
+      onMouseDown: (e: MouseEvent) => {
         mouseDown.handleNodeMouseDown(e, idleState, node.id);
       },
-      onMouseUp: (e: MouseEvent<HTMLButtonElement>) => {
+      onMouseUp: (e: MouseEvent) => {
         // если mouseDown не на этом же стикере, то не нужно ничего делать
         if (!mouseDown.getIsStickerMouseDown(idleState, node.id)) {
           return;
@@ -68,7 +66,6 @@ export function useIdleViewModel(params: ViewModelParams) {
     layout: {
       onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => {
         deleteSelected.handleKeyDown(e, idleState);
-        goToAddSticker.handleKeyDown(e);
       },
     },
     overlay: {
@@ -87,12 +84,6 @@ export function useIdleViewModel(params: ViewModelParams) {
       },
       onMouseUp: () => {
         mouseDown.handleWindowMouseUp(idleState);
-      },
-    },
-    actions: {
-      addSticker: {
-        isActive: false,
-        onClick: () => goToAddSticker.handleActionClick(),
       },
     },
   });

@@ -1,5 +1,5 @@
 import type { Point } from '../../domain/point';
-import { vectorFromPoints } from '../../domain/point';
+import { diffPoints } from '../../domain/point';
 import type { MouseEvent, Ref } from 'react';
 import clsx from 'clsx';
 
@@ -8,14 +8,23 @@ export function Arrow(props: {
   start: Point;
   end: Point;
   isSelected?: boolean;
+  noPointerEvents?: boolean;
   onClick?: (e: MouseEvent<SVGPathElement>) => void;
   onMouseDown?: (e: MouseEvent<SVGPathElement>) => void;
   onMouseUp?: (e: MouseEvent<SVGPathElement>) => void;
 }) {
-  const { ref, start, end, isSelected, onClick, onMouseDown, onMouseUp } =
-    props;
+  const {
+    ref,
+    start,
+    end,
+    isSelected,
+    noPointerEvents,
+    onClick,
+    onMouseDown,
+    onMouseUp,
+  } = props;
 
-  const vector = vectorFromPoints(start, end);
+  const vector = diffPoints(start, end);
   const angle = Math.atan2(vector.y, vector.x);
   const delta = Math.PI * (1 - 1 / 6);
   const arrowRigthAngle = angle + delta;
@@ -41,6 +50,7 @@ export function Arrow(props: {
         className={clsx(
           'pointer-events-auto transition-[stroke,fill] duration-300 hover:stroke-blue-500 hover:fill-blue-500',
           isSelected && 'stroke-blue-500 stroke-2 fill-blue-500',
+          noPointerEvents && 'pointer-events-none',
         )}
         d={`
           M ${start.x} ${start.y} L ${end.x} ${end.y} 

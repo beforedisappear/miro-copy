@@ -1,5 +1,5 @@
 import { useNodes } from './model/nodes';
-import { StickerIcon } from 'lucide-react';
+import { ArrowUpRight, StickerIcon } from 'lucide-react';
 import { useCanvasRect } from './lib/use-canvas-rect';
 import { useLayoutFocus } from './lib/use-layout-focus';
 import { useViewModel } from './view-model/use-view-model';
@@ -77,6 +77,12 @@ function BoardPage() {
           onClick={viewModel.actions?.addSticker?.onClick}
         >
           <StickerIcon />
+        </ActionButton>
+        <ActionButton
+          isActive={viewModel.actions?.addArrow?.isActive ?? false}
+          onClick={viewModel.actions?.addArrow?.onClick}
+        >
+          <ArrowUpRight />
         </ActionButton>
       </Actions>
     </Layout>

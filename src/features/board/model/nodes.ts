@@ -19,7 +19,7 @@ type ArrowNode = NodeBase & {
   end: Point;
 };
 
-type Node = StickerNode | ArrowNode;
+export type Node = StickerNode | ArrowNode;
 
 export type NodesModel = ReturnType<typeof useNodes>;
 
@@ -30,8 +30,8 @@ export function useNodes() {
     {
       id: '3',
       type: 'arrow',
-      start: { x: 110, y: 110 },
-      end: { x: 210, y: 210 },
+      start: { x: 10, y: 10, relativeTo: '1' },
+      end: { x: 20, y: 20, relativeTo: '2' },
     },
   ]);
 
@@ -53,10 +53,24 @@ export function useNodes() {
     ]);
   };
 
-  const deleteSticker = (args: { ids: string[] }) => {
-    const { ids } = args;
+  const deleteNodes = (ids: string[]) => {
+    setNodes(lastNodes => {
+      const arrowsRelativeIds = lastNodes
+        .filter(
+          node =>
+            (node.type === 'arrow' &&
+              node.start.relativeTo &&
+              ids.includes(node.start.relativeTo)) ||
+            (node.type === 'arrow' &&
+              node.end.relativeTo &&
+              ids.includes(node.end.relativeTo)),
+        )
+        .map(node => node.id);
 
-    setNodes(prev => prev.filter(node => !ids.includes(node.id)));
+      return lastNodes.filter(
+        node => !ids.includes(node.id) && !arrowsRelativeIds.includes(node.id),
+      );
+    });
   };
 
   const updateStickerText = (args: { id: string; text: string }) => {
@@ -68,7 +82,7 @@ export function useNodes() {
   };
 
   const updateNodesPositions = (args: {
-    positions: { id: string; x: number; y: number; type?: 'start' | 'end' }[];
+    positions: { id: string; point: Point; type?: 'start' | 'end' }[];
   }) => {
     const { positions } = args;
 
@@ -84,8 +98,8 @@ export function useNodes() {
 
           return {
             ...node,
-            start: newStartPosition ?? node.start,
-            end: newEndPosition ?? node.end,
+            start: newStartPosition?.point ?? node.start,
+            end: newEndPosition?.point ?? node.end,
           };
         }
 
@@ -93,8 +107,8 @@ export function useNodes() {
 
         return {
           ...node,
-          x: newPosition?.x ?? node.x,
-          y: newPosition?.y ?? node.y,
+          x: newPosition?.point.x ?? node.x,
+          y: newPosition?.point.y ?? node.y,
         };
       }),
     );
@@ -104,7 +118,7 @@ export function useNodes() {
     nodes,
     addSticker,
     addArrow,
-    deleteSticker,
+    deleteNodes,
     updateStickerText,
     updateNodesPositions,
   };

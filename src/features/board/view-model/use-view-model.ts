@@ -24,11 +24,19 @@ import {
 } from './variants/window-dragging';
 import type { ViewModel } from './view-model.types';
 import type { ViewModelParams } from './view-model-params.types';
-import { zoomHandler } from './decorator/zoom';
+import { useZoomDecorator } from './decorator/zoom';
+import { useAddArrowViewModel } from './variants/add-arrow';
+import type { AddArrowViewState } from './variants/add-arrow';
+import { useCommonActionsDecorator } from './decorator/common-actions';
+import { useDrawArrowViewModel } from './variants/draw-arrow';
+import type { DrawArrowViewState } from './variants/draw-arrow';
+import { useResolveRelativeStaticDecorator } from './decorator/resolve-relative';
 
 export type ViewState =
   | IdleViewState
   | AddStickerViewState
+  | AddArrowViewState
+  | DrawArrowViewState
   | SelectionWindowViewState
   | EditStickerViewState
   | NodesDraggingViewState
@@ -42,21 +50,35 @@ export function useViewModel(params: Omit<ViewModelParams, 'setViewState'>) {
   const newParams = { ...params, setViewState };
 
   const addStickerViewModel = useAddStickerViewModel(newParams);
+  const addArrowViewModel = useAddArrowViewModel(newParams);
+  const drawArrowViewModel = useDrawArrowViewModel(newParams);
   const editStickerViewModel = useEditStickerViewModel(newParams);
   const idleViewModel = useIdleViewModel(newParams);
   const selectionWindowViewModel = useSelectionWindowViewModel(newParams);
   const nodesDraggingViewModel = useNodesDraggingViewModel(newParams);
   const windowDraggingViewModel = useWindowDraggingViewModel(newParams);
 
-  const zoomDecorator = zoomHandler(newParams);
+  const zoomDecorator = useZoomDecorator(newParams);
+  const commonActionsDecorator = useCommonActionsDecorator(newParams);
 
   switch (viewState.type) {
     case 'idle': {
       viewModel = idleViewModel(viewState);
+      viewModel = commonActionsDecorator(viewModel);
       break;
     }
     case 'add-sticker': {
       viewModel = addStickerViewModel();
+      viewModel = commonActionsDecorator(viewModel);
+      break;
+    }
+    case 'add-arrow': {
+      viewModel = addArrowViewModel();
+      viewModel = commonActionsDecorator(viewModel);
+      break;
+    }
+    case 'draw-arrow': {
+      viewModel = drawArrowViewModel(viewState);
       break;
     }
     case 'selection-window': {
@@ -79,6 +101,8 @@ export function useViewModel(params: Omit<ViewModelParams, 'setViewState'>) {
     default:
       throw new Error('Invalid view model state');
   }
+
+  viewModel = useResolveRelativeStaticDecorator(viewModel);
 
   return zoomDecorator(viewModel);
 }

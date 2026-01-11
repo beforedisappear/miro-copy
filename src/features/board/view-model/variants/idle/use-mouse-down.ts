@@ -25,7 +25,7 @@ export function useMouseDown(params: ViewModelParams) {
   };
 
   const handleNodeMouseDown = (
-    e: MouseEvent<HTMLButtonElement>,
+    e: MouseEvent,
     idleState: IdleViewState,
     nodeId: string,
   ) => {

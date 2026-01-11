@@ -23,12 +23,18 @@ type ViewModelArrowNode = {
   start: Point;
   end: Point;
   isSelected?: boolean;
+  noPointerEvents?: boolean;
   onClick?: (e: MouseEvent<SVGPathElement>) => void;
   onMouseDown?: (e: MouseEvent<SVGPathElement>) => void;
   onMouseUp?: (e: MouseEvent<SVGPathElement>) => void;
 };
 
 type ViewModelNode = ViewModelStickerNode | ViewModelArrowNode;
+
+type ViewModelAction = {
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  isActive?: boolean;
+};
 
 export type ViewModel = {
   layout?: {
@@ -48,10 +54,8 @@ export type ViewModel = {
     onMouseWheel?: (e: globalThis.WheelEvent) => void;
   };
   actions?: {
-    addSticker: {
-      onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
-      isActive?: boolean;
-    };
+    addSticker?: ViewModelAction;
+    addArrow? : ViewModelAction;
   };
   selectionWindow?: Rect;
   windowPosition?: WindowPosition;

@@ -15,7 +15,7 @@ export function useAddStickerViewModel(params: ViewModelParams) {
     nodes: nodesModel.nodes,
     layout: {
       onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => {
-        if (e.key !== 'Enter') return;
+        if (e.key !== 'Escape') return;
 
         setViewState(goToIdle());
       },

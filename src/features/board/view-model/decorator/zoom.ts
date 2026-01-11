@@ -1,9 +1,9 @@
-import { pointOnScreenToCanvas } from '@/features/board/domain/screen';
 import type { ViewModelParams } from '../view-model-params.types';
 import type { ViewModel } from '../view-model.types';
-import { vectorFromPoints } from '../../domain/point';
+import { diffPoints } from '../../domain/point';
+import { pointOnScreenToCanvas } from '../../domain/screen';
 
-export function zoomHandler(params: ViewModelParams) {
+export function useZoomDecorator(params: ViewModelParams) {
   const { windowPositionModel, canvasRect } = params;
 
   return (viewModel: ViewModel) => {
@@ -32,7 +32,7 @@ export function zoomHandler(params: ViewModelParams) {
             canvasRect,
           );
 
-          const diff = vectorFromPoints(currentPoint, newPoint);
+          const diff = diffPoints(currentPoint, newPoint);
 
           windowPositionModel.setPosition({
             ...windowPositionModel.position,

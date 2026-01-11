@@ -14,7 +14,7 @@ export function useDeleteSelected(params: ViewModelParams) {
       if (viewState.selectedIds.size > 0) {
         const ids = Array.from(viewState.selectedIds);
 
-        nodesModel.deleteSticker({ ids });
+        nodesModel.deleteNodes(ids);
 
         setViewState(goToIdle({ selectedIds: new Set() }));
       }
