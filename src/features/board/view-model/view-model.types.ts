@@ -1,9 +1,11 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 import type { Rect } from '../domain/rect';
 import type { WindowPosition } from '../model/window-position';
+import type { Point } from '../domain/point';
 
-type ViewModelNode = {
+type ViewModelStickerNode = {
   id: string;
+  type: 'sticker';
   text: string;
   x: number;
   y: number;
@@ -14,6 +16,19 @@ type ViewModelNode = {
   onMouseDown?: (e: MouseEvent<HTMLButtonElement>) => void;
   onMouseUp?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
+
+type ViewModelArrowNode = {
+  id: string;
+  type: 'arrow';
+  start: Point;
+  end: Point;
+  isSelected?: boolean;
+  onClick?: (e: MouseEvent<SVGPathElement>) => void;
+  onMouseDown?: (e: MouseEvent<SVGPathElement>) => void;
+  onMouseUp?: (e: MouseEvent<SVGPathElement>) => void;
+};
+
+type ViewModelNode = ViewModelStickerNode | ViewModelArrowNode;
 
 export type ViewModel = {
   layout?: {

@@ -31,7 +31,10 @@ export function useSelectionWindowViewModel(params: ViewModelParams) {
     return nodesModel.nodes.map(node => {
       const nodeDimensions = nodesRects[node.id];
 
-      const nodeRect = createRectFromDimensions(node, nodeDimensions);
+      const nodeRect =
+        node.type === 'sticker'
+          ? createRectFromDimensions(node, nodeDimensions)
+          : createRectFromPoints(node.start, node.end);
 
       return {
         ...node,

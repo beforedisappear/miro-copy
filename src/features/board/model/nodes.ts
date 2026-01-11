@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { Point } from '../domain/point';
 
 type NodeBase = {
   id: string;
@@ -12,7 +13,13 @@ type StickerNode = NodeBase & {
   y: number;
 };
 
-type Node = StickerNode;
+type ArrowNode = NodeBase & {
+  type: 'arrow';
+  start: Point;
+  end: Point;
+};
+
+type Node = StickerNode | ArrowNode;
 
 export type NodesModel = ReturnType<typeof useNodes>;
 
@@ -20,6 +27,12 @@ export function useNodes() {
   const [nodes, setNodes] = useState<Node[]>([
     { id: '1', type: 'sticker', text: 'Hello', x: 100, y: 100 },
     { id: '2', type: 'sticker', text: 'World', x: 200, y: 200 },
+    {
+      id: '3',
+      type: 'arrow',
+      start: { x: 110, y: 110 },
+      end: { x: 210, y: 210 },
+    },
   ]);
 
   const addSticker = (args: { text: string; x: number; y: number }) => {
@@ -28,6 +41,15 @@ export function useNodes() {
     setNodes(prev => [
       ...prev,
       { id: crypto.randomUUID(), type: 'sticker', text, x, y },
+    ]);
+  };
+
+  const addArrow = (args: { start: Point; end: Point }) => {
+    const { start, end } = args;
+
+    setNodes(prev => [
+      ...prev,
+      { id: crypto.randomUUID(), type: 'arrow', start, end },
     ]);
   };
 
@@ -46,21 +68,34 @@ export function useNodes() {
   };
 
   const updateNodesPositions = (args: {
-    positions: { id: string; x: number; y: number }[];
+    positions: { id: string; x: number; y: number; type?: 'start' | 'end' }[];
   }) => {
     const { positions } = args;
 
-    const record = Object.fromEntries(positions.map(p => [p.id, p]));
+    const record = Object.fromEntries(
+      positions.map(p => [`${p.id}${p.type ?? ''}`, p]),
+    );
 
     setNodes(prev =>
       prev.map(node => {
-        const newPosition = record[node.id];
+        if (node.type === 'arrow') {
+          const newStartPosition = record[`${node.id}start`];
+          const newEndPosition = record[`${node.id}end`];
 
-        if (newPosition) {
-          return { ...node, x: newPosition.x, y: newPosition.y };
+          return {
+            ...node,
+            start: newStartPosition ?? node.start,
+            end: newEndPosition ?? node.end,
+          };
         }
 
-        return node;
+        const newPosition = record[node.id];
+
+        return {
+          ...node,
+          x: newPosition?.x ?? node.x,
+          y: newPosition?.y ?? node.y,
+        };
       }),
     );
   };
@@ -68,6 +103,7 @@ export function useNodes() {
   return {
     nodes,
     addSticker,
+    addArrow,
     deleteSticker,
     updateStickerText,
     updateNodesPositions,

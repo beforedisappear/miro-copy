@@ -13,3 +13,7 @@ export function vectorFromPoints(point1: Point, point2: Point) {
 export function distanceFromPoints(point1: Point, point2: Point) {
   return Math.sqrt((point2.x - point1.x) ** 2 + (point2.y - point1.y) ** 2);
 }
+
+export function addPoints(point1: Point, point2: Point) {
+  return { x: point1.x + point2.x, y: point1.y + point2.y };
+}

@@ -4,7 +4,7 @@ import { goToIdle } from './idle';
 import type { Point } from '../../domain/point';
 import { pointOnScreenToCanvas } from '../../domain/screen';
 import { type Selection } from '../../domain/selection';
-import { vectorFromPoints } from '../../domain/point';
+import { addPoints, vectorFromPoints } from '../../domain/point';
 
 export type NodesDraggingViewState = {
   type: 'nodes-dragging';
@@ -21,12 +21,18 @@ export function useNodesDraggingViewModel(params: ViewModelParams) {
       if (state.nodesToMove.has(node.id)) {
         const diff = vectorFromPoints(state.startPoint, state.endPoint);
 
-        return {
-          ...node,
-          x: node.x + diff.x,
-          y: node.y + diff.y,
-          isSelected: true,
-        };
+        if (node.type === 'sticker') {
+          const newPoint = addPoints(node, diff);
+
+          return { ...node, ...newPoint, isSelected: true };
+        }
+
+        if (node.type === 'arrow') {
+          const newStart = addPoints(node.start, diff);
+          const newEnd = addPoints(node.end, diff);
+
+          return { ...node, start: newStart, end: newEnd, isSelected: true };
+        }
       }
 
       return node;
@@ -40,9 +46,17 @@ export function useNodesDraggingViewModel(params: ViewModelParams) {
       nodes,
       window: {
         onMouseUp: () => {
-          const nodesToMove = nodes.filter(node =>
-            state.nodesToMove.has(node.id),
-          );
+          const nodesToMove = nodes
+            .filter(node => state.nodesToMove.has(node.id))
+            .flatMap(node => {
+              if (node.type === 'arrow')
+                return [
+                  { id: node.id, type: 'start' as const, ...node.start },
+                  { id: node.id, type: 'end' as const, ...node.end },
+                ];
+
+              return [{ id: node.id, x: node.x, y: node.y }];
+            });
 
           nodesModel.updateNodesPositions({ positions: nodesToMove });
 

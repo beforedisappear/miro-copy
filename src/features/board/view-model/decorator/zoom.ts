@@ -14,7 +14,7 @@ export function zoomHandler(params: ViewModelParams) {
         onMouseWheel: (e: globalThis.WheelEvent) => {
           viewModel.window?.onMouseWheel?.(e);
 
-          const delta = e.deltaY > 0 ? 1.1 : 0.9;
+          const delta = e.deltaY > 0 ? 0.95 : 1.05;
 
           const newZoom = windowPositionModel.position.zoom * delta;
 
@@ -28,10 +28,7 @@ export function zoomHandler(params: ViewModelParams) {
           // новые координаты мышки в координатах канваса после масштабирования
           const newPoint = pointOnScreenToCanvas(
             { x: e.clientX, y: e.clientY },
-            {
-              ...windowPositionModel.position,
-              zoom: newZoom,
-            },
+            { ...windowPositionModel.position, zoom: newZoom },
             canvasRect,
           );
 
